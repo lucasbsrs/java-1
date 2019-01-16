@@ -42,7 +42,7 @@ public class DesafioMeuTimeService {
 			throw new IdentificadorUtilizadoException();
 		}
 
-		Time resultTime = buscarTime(id);
+		Time resultTime = buscarTime(idTime);
 
 		if (resultTime == null) {
 			throw new TimeNaoEncontradoException();
@@ -64,23 +64,117 @@ public class DesafioMeuTimeService {
 	}
 
 	public Long buscarCapitaoDoTime(Long idTime) {
-		Time resultTime = buscarTime(idTime);
+		Time time = buscarTime(idTime);
 
-		if (resultTime == null) {
+		if (time == null) {
 			throw new TimeNaoEncontradoException();
 		}
 
-		Long idJogadorCapitao = buscarIdJogadorCapitao(idTime);
-		if (idJogadorCapitao == null) {
+		if (time.getIdJogador() == null) {
 			throw new CapitaoNaoInformadoException();
 		}
 
-		return idJogadorCapitao;
+		return time.getIdJogador();
+	}
+
+	public String buscarNomeJogador(Long idJogador) {
+		Jogador jogador = buscarJogador(idJogador);
+
+		if (jogador == null) {
+			throw new JogadorNaoEncontradoException();
+		}
+
+		return jogador.getNome();
+	}
+
+	public String buscarNomeTime(Long idTime) {
+		Time time = buscarTime(idTime);
+
+		if (time == null) {
+			throw new TimeNaoEncontradoException();
+		}
+
+		return time.getNome();
+	}
+
+	public List<Long> buscarJogadoresDoTime(Long idTime) {
+		Time time = buscarTime(idTime);
+
+		if (time == null) {
+			throw new TimeNaoEncontradoException();
+		}
+
+		return buscarIdJogadoresPorTime(idTime);
+	}
+
+	public Long buscarMelhorJogadorDoTime(Long idTime) {
+		Time time = buscarTime(idTime);
+
+		if (time == null) {
+			throw new TimeNaoEncontradoException();
+		}
+
+		return buscarMelhorJogadorPorTime(idTime);
+	}
+
+	public Long buscarJogadorMaisVelho(Long idTime) {
+		Time time = buscarTime(idTime);
+
+		if (time == null) {
+			throw new TimeNaoEncontradoException();
+		}
+
+		return buscarJogadorMaisVelhoPorTime(idTime);
 	}
 
 	public List<Long> buscarTimes() {
 		return listaTimes.stream().sorted(Comparator.comparingLong(Time::getId)).map(Time::getId)
 				.collect(Collectors.toList());
+	}
+
+	public Long buscarJogadorMaiorSalario(Long idTime) {
+		Time time = buscarTime(idTime);
+
+		if (time == null) {
+			throw new TimeNaoEncontradoException();
+		}
+
+		return buscarJogadorComMaiorSalarioPorTime(idTime);
+	}
+
+	public BigDecimal buscarSalarioDoJogador(Long idJogador) {
+		Jogador jogador = buscarJogador(idJogador);
+
+		if (jogador == null) {
+			throw new JogadorNaoEncontradoException();
+		}
+
+		return buscarSalarioJogador(idJogador);
+	}
+
+	public List<Long> buscarTopJogadores(Integer top) {
+		return listaJogadores.stream().sorted(Comparator.comparing(Jogador::getNivelHabilidade).reversed())
+				.map(Jogador::getId).limit(top).collect(Collectors.toList());
+	}
+
+	public String buscarCorCamisaTimeDeFora(Long timeDaCasa, Long timeDeFora) {
+		Time timeCasa = buscarTime(timeDaCasa);
+		Time timeFora = buscarTime(timeDeFora);
+		
+		if (timeCasa == null) {
+			throw new TimeNaoEncontradoException();
+		}
+
+		if (timeFora == null) {
+			throw new TimeNaoEncontradoException();
+		}
+		
+		if(timeCasa.getCorUniformePrincipal().equals(timeFora.getCorUniformePrincipal())) {
+			return timeFora.getCorUniformeSecundario();
+		}
+		
+		return timeFora.getCorUniformePrincipal();
+
 	}
 
 	private Time buscarTime(Long idTime) {
@@ -91,8 +185,30 @@ public class DesafioMeuTimeService {
 		return listaJogadores.stream().filter(x -> x.getId().equals(idJogador)).findFirst().orElse(null);
 	}
 
-	private Long buscarIdJogadorCapitao(Long idTime) {
-		return listaTimes.stream().filter(x -> x.getId().equals(idTime)).map(Time::getIdJogador).findFirst().get();
+	private List<Long> buscarIdJogadoresPorTime(Long idTime) {
+		return listaJogadores.stream().filter(x -> x.getIdTime().equals(idTime)).map(Jogador::getId).sorted()
+				.collect(Collectors.toList());
 	}
 
+	private Long buscarMelhorJogadorPorTime(Long idTime) {
+		return listaJogadores.stream().filter(x -> x.getIdTime().equals(idTime))
+				.max(Comparator.comparingInt(Jogador::getNivelHabilidade)).map(Jogador::getId).get();
+	}
+
+	private Long buscarJogadorMaisVelhoPorTime(Long idTime) {
+		return listaJogadores.stream().filter(x -> x.getIdTime().equals(idTime))
+				.sorted(Comparator.comparing(Jogador::getId))
+				.max(Comparator.comparing(Jogador::getDataNascimento).reversed()).map(Jogador::getId).get();
+	}
+
+	private Long buscarJogadorComMaiorSalarioPorTime(Long idTime) {
+		return listaJogadores.stream().filter(x -> x.getIdTime().equals(idTime))
+				.sorted(Comparator.comparing(Jogador::getId)).max(Comparator.comparing(Jogador::getSalario))
+				.map(Jogador::getId).get();
+	}
+
+	private BigDecimal buscarSalarioJogador(Long idJogador) {
+		return listaJogadores.stream().filter(x -> x.getId().equals(idJogador)).map(Jogador::getSalario).findFirst()
+				.get();
+	}
 }

@@ -13,47 +13,47 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 	
 	@Desafio("incluirTime")
 	public void incluirTime(Long id, String nome, LocalDate dataCriacao, String corUniformePrincipal, String corUniformeSecundario) {
-		desafioMeuTimeService.incluirTime((long)1, "SC Internacional", LocalDate.now(), "Vermelho", "Branco", null);
+		desafioMeuTimeService.incluirTime(id, nome, dataCriacao, corUniformePrincipal, corUniformeSecundario, null);
 	}
 
 	@Desafio("incluirJogador")
 	public void incluirJogador(Long id, Long idTime, String nome, LocalDate dataNascimento, Integer nivelHabilidade, BigDecimal salario) {
-		desafioMeuTimeService.incluirJogador((long)1, (long)1, "Lucas Silva", LocalDate.now(), 50, new BigDecimal(100000));
+		desafioMeuTimeService.incluirJogador(id, idTime, nome, dataNascimento, nivelHabilidade, salario);
 	}
 
 	@Desafio("definirCapitao")
 	public void definirCapitao(Long idJogador) {
-		desafioMeuTimeService.definirCapitao((long)1);
+		desafioMeuTimeService.definirCapitao(idJogador);
 	}
 
 	@Desafio("buscarCapitaoDoTime")
 	public Long buscarCapitaoDoTime(Long idTime) {
-		return desafioMeuTimeService.buscarCapitaoDoTime((long) 1);
+		return desafioMeuTimeService.buscarCapitaoDoTime(idTime);
 	}
 
 	@Desafio("buscarNomeJogador")
 	public String buscarNomeJogador(Long idJogador) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarNomeJogador(idJogador);
 	}
 
 	@Desafio("buscarNomeTime")
 	public String buscarNomeTime(Long idTime) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarNomeTime(idTime);
 	}
 
 	@Desafio("buscarJogadoresDoTime")
 	public List<Long> buscarJogadoresDoTime(Long idTime) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarJogadoresDoTime(idTime);
 	}
 
 	@Desafio("buscarMelhorJogadorDoTime")
 	public Long buscarMelhorJogadorDoTime(Long idTime) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarMelhorJogadorDoTime(idTime);
 	}
 
 	@Desafio("buscarJogadorMaisVelho")
 	public Long buscarJogadorMaisVelho(Long idTime) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarJogadorMaisVelho(idTime);
 	}
 
 	@Desafio("buscarTimes")
@@ -63,22 +63,22 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 
 	@Desafio("buscarJogadorMaiorSalario")
 	public Long buscarJogadorMaiorSalario(Long idTime) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarJogadorMaiorSalario(idTime);
 	}
 
 	@Desafio("buscarSalarioDoJogador")
 	public BigDecimal buscarSalarioDoJogador(Long idJogador) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarSalarioDoJogador(idJogador);
 	}
 
 	@Desafio("buscarTopJogadores")
 	public List<Long> buscarTopJogadores(Integer top) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarTopJogadores(top);
 	}
 
 	@Desafio("buscarCorCamisaTimeDeFora")
 	public String buscarCorCamisaTimeDeFora(Long timeDaCasa, Long timeDeFora) {
-		throw new UnsupportedOperationException();
+		return desafioMeuTimeService.buscarCorCamisaTimeDeFora(timeDaCasa, timeDeFora);
 	}
 
 }
